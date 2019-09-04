@@ -10,31 +10,31 @@
 		this.imgjson = {
 			"images": [{
 					"name": "bg0",
-					"url": "/xiaoxiaole/img/game_bg.png"
+					"url": "/h5game/xiaoxiaole/img/game_bg.png"
 				},
 				{
 					"name": "block",
-					"url": "/xiaoxiaole/img/qa.png"
+					"url": "/h5game/xiaoxiaole/img/qa.png"
 				},
 				{
 					"name": "bomb",
-					"url": "/xiaoxiaole/img/boom.png"
+					"url": "/h5game/xiaoxiaole/img/boom.png"
 				},
 				{
 					"name": "bg1",
-					"url": "/xiaoxiaole/img/menu_bg.png"
+					"url": "/h5game/xiaoxiaole/img/menu_bg.png"
 				},
 				{
 					"name": "total1",
-					"url": "/xiaoxiaole/img/menu_bg_total_02.png"
+					"url": "/h5game/xiaoxiaole/img/menu_bg_total_02.png"
 				},
 				{
 					"name": "total2",
-					"url": "/xiaoxiaole/img/menu_bg_total_04.png"
+					"url": "/h5game/xiaoxiaole/img/menu_bg_total_04.png"
 				},
 				{
 					"name": "score",
-					"url": "/xiaoxiaole/img/game_in_ui.png"
+					"url": "/h5game/xiaoxiaole/img/game_in_ui.png"
 				},
 			]
 		};

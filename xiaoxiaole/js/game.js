@@ -2,40 +2,39 @@
 
 	var Game = window.Game = function(params) {
 		this.canvas = document.getElementById(params.id);
-		this.k=0.7;
-		this.canvas.width = Math.floor(params.width*this.k);
-		this.canvas.height = Math.floor(params.height*this.k);
-		this.initX=41*this.k;
-		this.initY=295*this.k;
+		this.canvas.width =params.width;
+		this.canvas.height = params.height;
+		this.initX=30;
+		this.initY=205;
 		this.ctx = this.canvas.getContext("2d");
 		this.imgjson = {
 			"images": [{
 					"name": "bg0",
-					"url": "/H5game/xiaoxiaole/img/game_bg.png"
+					"url": "/xiaoxiaole/img/game_bg.png"
 				},
 				{
 					"name": "block",
-					"url": "/H5game/xiaoxiaole/img/qa.png"
+					"url": "/xiaoxiaole/img/qa.png"
 				},
 				{
 					"name": "bomb",
-					"url": "/H5game/xiaoxiaole/img/boom.png"
+					"url": "/xiaoxiaole/img/boom.png"
 				},
 				{
 					"name": "bg1",
-					"url": "/H5game/xiaoxiaole/img/menu_bg.png"
+					"url": "/xiaoxiaole/img/menu_bg.png"
 				},
 				{
 					"name": "total1",
-					"url": "/H5game/xiaoxiaole/img/menu_bg_total_02.png"
+					"url": "/xiaoxiaole/img/menu_bg_total_02.png"
 				},
 				{
 					"name": "total2",
-					"url": "/H5game/xiaoxiaole/img/menu_bg_total_04.png"
+					"url": "/xiaoxiaole/img/menu_bg_total_04.png"
 				},
 				{
 					"name": "score",
-					"url": "/H5game/xiaoxiaole/img/game_in_ui.png"
+					"url": "/xiaoxiaole/img/game_in_ui.png"
 				},
 			]
 		};
@@ -87,39 +86,31 @@
 			return Math.round(Math.random() * (max - min) + min);
 		},
 		adaptDevice: function() {
-			var isMobile = {
-				Android: function() {
-					return navigator.userAgent.match(/Android/i);
-				},
-				BlackBerry: function() {
-					return navigator.userAgent.match(/BlackBerry/i);
-				},
-				iOS: function() {
-					return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-				},
-				Opera: function() {
-					return navigator.userAgent.match(/Opera Mini/i);
-				},
-				Windows: function() {
-					return navigator.userAgent.match(/IEMobile/i);
-				},
-				any: function() {
-					return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-				}
-			};
-			var isPhone = isMobile.Android();
-			if (isPhone) {
+			
+			if (!this.isPC()) {
+				
 				//如果是手机访问，将canvas大小设为网页可见的大小，乘以0.96是为了四边留些空隙
-				this.k = window.innerWidth/712;
-				console.log(this.k)
-				this.canvas.width = Math.floor(712*this.k);
-				this.canvas.height = Math.floor(1024*this.k);
-				this.initX=41*this.k;
-				this.initY=295*this.k;
-			} else {
-				// this.canvas.width = 300;
-				// this.canvas.height = 500;
-			}
-        }
+				 let stagew=window.screen.width*0.95;
+				let scale = stagew / this.canvas.width;
+				document.querySelector('meta[name="viewport"]').setAttribute('content','width=device-width,initial-scale=' + scale + ', user-scalable=no');
+				console.log(scale)
+				
+			} 
+        },
+		isPC:function (){
+				var userAgentInfo = navigator.userAgent;
+				var Agents = ["Android", "iPhone",
+					"SymbianOS", "Windows Phone",
+					"iPad", "iPod"
+				];
+				var flag = true;
+				for (var v = 0; v < Agents.length; v++) {
+					if (userAgentInfo.indexOf(Agents[v]) > 0) {
+						flag = false;
+						break;
+					}
+				}
+				return flag;
+		}
 	};
 })()

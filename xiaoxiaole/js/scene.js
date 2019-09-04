@@ -103,9 +103,9 @@
 					
 					break;
 					case 2:
-					       if (mouseX >game.initX && mouseY > game.initY && mouseX < game.initX+7*90*game.k && mouseY < game.initY+7*295*game.k) {
-					       	let y = Math.floor((mouseX -game.initX) /(game.k*90));
-					       	let x = Math.floor((mouseY - game.initY) /(game.k*90));
+					       if (mouseX >game.initX && mouseY > game.initY && mouseX < game.initX+7*63 && mouseY < game.initY+7*205) {
+					       	let y = Math.floor((mouseX -game.initX) /63);
+					       	let x = Math.floor((mouseY - game.initY) /63);
 					       	self.bg.block[x][y].isclick = true;
 					       	game.change.push(self.bg.block[x][y]);
 					       	if (game.change.length >= 2) {

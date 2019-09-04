@@ -5,7 +5,7 @@
 		//图片坐标
 		this.y = 0;
 		this.x = 0;
-		this.w = 90*game.k;
+		this.w = 64;
 		this.code = [];
 		this.block = [];
 		this.state = "check";

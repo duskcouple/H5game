@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>地图编辑</title>
+		<style type="text/css">
+			*{
+				margin:0;
+				padding:0;
+			}
+			body,html{
+				height:100%;
+			}
+			.canvasbox{
+				width:416px;
+				height:416px;
+				position: relative;
+				margin:10px;
+			}
+			canvas{
+				border:1px solid #333;
+				background-color: black;
+			}
+			.cursor{
+				position: absolute;
+				width:32px;
+				height:32px;
+				border:1px solid red;
+				box-sizing:border-box;
+				top:64px;
+				left:64px;
+			}
+			.landtype li{
+				float: left;
+				width:32px;
+				height:32px;
+				margin-right: 10px;
+				background:url('images/block.bmp');
+				box-sizing:border-box;
+			}
+			.landtype{
+				list-style:none;
+				margin:10px;
+				overflow: hidden;
+			}
+			.landtype li.no1{
+				background-position: 0 0;
+			}
+			.landtype li.no2{
+				background-position: -32px 0;
+			}
+			.landtype li.no3{
+				background-position: -64px 0;
+			}
+			.landtype li.no4{
+				background-position: -96px 0;
+			}
+			.landtype li.no5{
+				background:black;
+			}
+			.landtype li.cur{
+		
+				border:3px solid red;
+			}
+			.landtype li.small{
+				width:16px;
+				height:16px;
+			}
+			.btn{
+				width:100px;
+				height:60px;
+				background-color:skyblue;
+			}
+			.list{
+				float: left;
+				width:260px;
+				height:100%;
+				border-right:1px solid #333;
+			}
+			.list li{
+				font-size:30px;
+				line-height:30px;
+				padding-left:20px;
+			}
+		 
+			.list li.cur{
+				color:red;
+			}
+			.main{
+				float: left;
+				width:460px;
+				padding-left: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="list">
+			当前本地maps文件夹中地图：
+			<ul>
+							 
+			</ul>
+		 	<input type="number" value="1" id="level"/>
+		</div>
+		
+		<div class="main">
+			<h1></h1>
+			<div class="tip">
+				<p>
+					信号量landtype值，1-砖头 2-钢块 3-草地 4-水面 0-无
+				</p>
+			</div>
+			<div class="tools">
+				<ul class="landtype">
+					<li class="no1 cur" data-landtype="1" data-base="32"></li>
+					<li class="no1 small" data-landtype="1" data-base="16"></li>
+					<li class="no2" data-landtype="2" data-base="32"></li>
+					<li class="no2 small" data-landtype="2" data-base="16"></li>
+					<li class="no3" data-landtype="3" data-base="32"></li>
+					<li class="no4" data-landtype="4" data-base="32"></li>
+					<li class="no5" data-landtype="0" data-base="32"></li>
+				</ul>
+		
+			</div>
+			<div class="canvasbox">
+				<span class="cursor"></span>
+				<canvas width="416" height="416"></canvas>
+			</div>
+			<input type="button" value="保存" class="btn" id="save"/>
+		</div>
+		<script src="/tank/js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var canvas = document.querySelector('canvas');//转为原生对象
+			var ctx = canvas.getContext("2d");
+			var cursor=document.querySelector(".cursor");
+			var canvasbox=document.querySelector(".canvasbox");
+			var image = new Image();
+			image.src = "images/block.bmp";
+			
+			//绘制的类型编号
+			var landtype = 1;
+			//绘制的大小
+			var base = 32;
+			//现在编辑的文件名
+			var noweditfile = "";
+			
+			//矩阵
+			var code = (function(){
+				var code = [];
+				for (var i = 0; i < 26; i++) {
+					code[i]=[];
+					for (let j = 0; j < 26; j++) {
+						code[i][j]=0;
+					}
+				}
+				return code;
+			})();
+			//改变矩阵的函数
+			function changecode(row,col,landtype){
+				code[row][col] =  landtype ;
+				//console.log(code)
+			}
+			let oLi=document.querySelectorAll(".landtype li")
+			document.querySelector(".landtype").addEventListener('click',function(ev){
+				var event = ev || window.event;
+				  var target = event.target || event.srcElement;
+				  // 判断是否匹配目标元素
+				  if (target.nodeName.toLocaleLowerCase() == 'li') {
+					//console.log( target.parentNode.childNodes);
+					landtype=Math.round(target.getAttribute('data-landtype'))
+					base=Math.round(target.getAttribute('data-base'));
+					
+					for(let i=0;i<7;i++){
+						oLi[i].classList.remove("cur")
+					}
+					target.classList.add("cur");
+					//改变光标大小
+					
+					cursor.style.width=cursor.style.height= base +"px";
+					
+				  }
+				
+			})
+			image.onload=function(){
+				//画老家
+				ctx.drawImage(image,5 * 32,0,32,32,6 * 32,12 * 32,32,32);
+				document.querySelector("canvas").addEventListener("mousemove",function(ev){
+						var mousex = ev.offsetX;
+						var mousey = ev.offsetY;
+					
+						var row = parseInt(mousey/base);
+						var col = parseInt(mousex/base);
+						
+						cursor.style.cssText="left:" + col*base +"px;top:"+ row*base+"px;";
+						cursor.style.width=cursor.style.height= base +"px";
+				})
+				 canvasbox.addEventListener("mousedown",function(event){
+					var mousex = event.clientX - canvasbox.offsetLeft;
+					var mousey = event.clientY - canvasbox.offsetTop;
+					var row = parseInt(mousey/base);
+					var col = parseInt(mousex/base);
+					 
+					//画一张
+					if(landtype != 0){
+						ctx.drawImage(image,(landtype - 1) * 32,0,base,base,col * base,row * base,base,base);
+						//改变数组，row和col有一个倍数。
+						//比如现在是画大格，base是32，此时要改变4个矩阵。
+						//此时的3行8列，表示左侧是16小列，上方有6个小行。
+						changecode(row * base / 16 , col * base / 16 , landtype);
+						if(base == 32){
+							changecode(row * 2 + 1 ,col * 2 , landtype);
+							changecode(row * 2 , col * 2 + 1, landtype);
+							changecode(row * 2 + 1,col * 2 + 1, landtype);
+						}
+					}else{
+				
+						ctx.clearRect(col * base,row * base,base,base);
+				
+						//改变数组，这一项恢复为0
+						changecode(row * base / 16 , col * base / 16 , 0);
+						if(base == 32){
+							changecode(row * 2 + 1 , col * 2 , 0);
+							changecode(row * 2 , col * 2 + 1 , 0);
+							changecode(row * 2 + 1 , col * 2 + 1 , 0);
+						}
+					}
+				
+					canvasbox.addEventListener("mousemove",myfunction);
+				});
+				canvasbox.addEventListener("mouseup",function(event){
+					canvasbox.removeEventListener("mousemove",myfunction);
+				});
+			}
+			myfunction=function(event){
+				var mousex = event.clientX - canvasbox.offsetLeft;
+				var mousey = event.clientY - canvasbox.offsetTop;
+							 
+							
+				var row = parseInt(mousey/base);
+				var col = parseInt(mousex/base);
+							 
+				//测试画一张
+				if(landtype != 0){
+					ctx.drawImage(image,(landtype - 1) * 32,0,base,base,col * base,row * base,base,base);
+					//改变数组
+					changecode(row * base / 16 , col * base / 16 , landtype);
+					if(base == 32){
+						changecode(row * 2 + 1 ,col * 2 , landtype);
+						changecode(row * 2 , col * 2 + 1, landtype);
+						changecode(row * 2 + 1,col * 2 + 1, landtype);
+					}
+				}else{
+					//ctx.clearRect(col * base,row * base,base,base);
+					//改变数组
+					 changecode(row * base / 16 , col * base / 16 , 0);
+					if(base == 32){
+						changecode(row * 2 + 1 , col * 2 , 0);
+						changecode(row * 2 , col * 2 + 1 , 0);
+						changecode(row * 2 + 1 , col * 2 + 1 , 0);
+					}
+				}
+			}
+			
+			document.querySelector("#save").onclick=function(){
+				let obj={}
+				obj.arr=code;
+				obj.level=document.getElementById('level').value;
+				ajax({
+					url: '/mapdata',
+					type: "POST",
+					data: JSON.stringify(obj),
+					success: function (data) {
+						console.log(data)
+						
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

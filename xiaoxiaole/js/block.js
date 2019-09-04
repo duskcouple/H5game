@@ -3,11 +3,10 @@
 	var Block=window.Block=function (x, y, type) {
 		this.cow=x;
 		this.row=y;
-		this.w = Math.round(90*game.k);
-		this.sw=63;
+		this.w =63;
 		this.type = type;
-		this.y = Math.round(game.initY+this.row*this.w);
-		this.x = Math.round(game.initX+this.cow*this.w);
+		this.y = 205+this.row*this.w;
+		this.x =30+this.cow*this.w;
 		this.image = game.imglist.block;
 		this.boomimg = game.imglist.bomb;
 		this.isboom = false;
@@ -46,25 +45,25 @@
 			if (this.isboom) return;
 			switch (this.type) {
 				case 0:
-					game.ctx.drawImage(this.image, 195, 0, this.sw, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 195, 0, this.w, this.w, this.x, this.y, this.w, this.w);
 					break;
 				case 1:
-					game.ctx.drawImage(this.image, 195, 66, this.sw, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 195, 66, this.w, this.w, this.x, this.y, this.w, this.w);
 					break;
 				case 2:
-					game.ctx.drawImage(this.image, 193, 129, this.sw, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 193, 129, this.w, this.w, this.x, this.y, this.w, this.w);
 					break;
 				case 3:
-					game.ctx.drawImage(this.image, 266, 68, this.sw, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 266, 68, this.w, this.w, this.x, this.y, this.w, this.w);
 					break;
 				case 4:
-					game.ctx.drawImage(this.image, 450, 0, this.sw, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 450, 0, this.w, this.w, this.x, this.y, this.w, this.w);
 					break;
 				case 5:
-					game.ctx.drawImage(this.image, 388, 0, this.sw, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 388, 0, this.w, this.w, this.x, this.y, this.w, this.w);
 					break;
 				case 6:
-					game.ctx.drawImage(this.image, 0, 168, this.sw - 3, this.sw, this.x, this.y, this.w, this.w);
+					game.ctx.drawImage(this.image, 0, 168, this.w - 3, this.w, this.x, this.y, this.w, this.w);
 					break;
 				default:
 					break;
